@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Alke Wallet - Menú</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="menu.html">Alke Wallet</a>
+        <div class="d-flex">
+          <button id="logoutBtn" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container my-4">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Saldo</h5>
+              <p class="display-6"><span id="balance">$0</span> <small id="currencyLabel" class="text-muted">CLP</small></p>
+            </div>
+          </div>
+
+          <div class="list-group">
+            <a href="deposit.html" class="list-group-item list-group-item-action">Depositar</a>
+            <a href="sendmoney.html" class="list-group-item list-group-item-action">Enviar dinero</a>
+            <a href="transactions.html" class="list-group-item list-group-item-action">Últimos movimientos</a>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Resumen</h5>
+              <p id="welcome" class="lead">Bienvenido a Alke Wallet</p>
+              <p>Usa el menú para navegar entre las funcionalidades.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+    <script src="assets/js/common.js"></script>
+    <script>
+      $(function(){
+        Alke.requireLogin();
+        // Obtener usuario desde localStorage
+        const userRaw = localStorage.getItem(Alke.USER_KEY);
+        let username = '';
+        if (userRaw) {
+          try { username = JSON.parse(userRaw).username || ''; } catch(e) { username = ''; }
+        }
+        $('#balance').text(Alke.formatCurrency(Alke.getBalance()));
+        $('#logoutBtn').click(Alke.logout);
+        if (username) {
+          // Capitalizar nombre (primera letra de cada palabra)
+          const capName = username.split(' ').map(s => s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : '').join(' ');
+          $('#welcome').text(`Bienvenido a Alke Wallet, ${capName}`);
+        } else {
+          $('#welcome').text('Bienvenido a Alke Wallet');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+body { background: linear-gradient(135deg, #f8f9fa 0%, #e9f0ff 40%, #e6fffb 100%); }
+#balance { font-weight: 700; }
+.table td, .table th { vertical-align: middle; }
+
+.hero-card { background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9)); border-radius: 0.75rem; }
+.wallet-illustration { filter: drop-shadow(0 6px 10px rgba(43,108,176,0.18)); max-width: 100%; height: auto; }
+
+/* Justificación para texto de portada */
+.hero-card .card-body p { text-align: justify; text-justify: inter-word; hyphens: auto; }
+
+/* Pequeños ajustes responsivos */
+@media (max-width: 767px) {
+  #balance { font-size: 1.5rem; }
+  .wallet-illustration { width: 140px; height: auto; margin: 0 auto 1rem; display: block; }
+}
