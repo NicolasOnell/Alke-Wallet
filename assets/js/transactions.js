@@ -15,15 +15,6 @@ $(function(){
     if($('#balance').length) $('#balance').text(Alke.formatCurrency(Alke.getBalance()));
   }
 
-  function removeUser(i){
-    // i es el índice relativo dentro de las transacciones del usuario
-    const userTx = Alke.loadUserTransactions();
-    userTx.splice(i,1);
-    Alke.saveUserTransactions(userTx);
-    Alke.showToast('Transacción eliminada', 'warning');
-    render();
-  }
-
   $('#logoutBtn').click(Alke.logout);
   render();
 });

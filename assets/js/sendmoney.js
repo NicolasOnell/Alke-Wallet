@@ -1,11 +1,6 @@
 $(function(){
   Alke.requireLogin();
 
-  function currentDateTime(){
-    const d = new Date();
-    const pad = n => String(n).padStart(2,'0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
 
   function refreshContacts(){
     const contacts = Alke.loadContacts();
@@ -49,10 +44,10 @@ $(function(){
     }
     // Guardar transacción (egreso)
     const tx = Alke.loadTransactions();
-    const date = currentDateTime();
+    const date = Alke.currentDateTime();
     tx.unshift({date, description: `Envío a ${to} ${note ? '- ' + note : ''}`, amount: amount, type: 'out'});
     Alke.saveTransactions(tx);
-    Alke.showToast('Transferencia simulada', 'success');
+    Alke.showToast('Transferencia realizada', 'success');
     // agregar contacto si no existe
     const contacts = Alke.loadContacts();
     if(!contacts.includes(to)){
