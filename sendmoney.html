@@ -1,67 +1,129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Alke Wallet - Enviar dinero</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="menu.html">Alke Wallet</a>
-        <div class="d-flex">
-          <button id="logoutBtn" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alke Wallet - Enviar Dinero</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/CSS/styles.css">
+</head>
+
+<body id="sendPage">
+
+<nav class="app-navbar">
+  <span class="brand" id="brandLink">
+    <i class="bi bi-wallet2"></i> Alke Wallet
+  </span>
+
+  <div class="navbar-right">
+    <button id="logoutBtn" class="btn btn-sm btn-danger">Cerrar sesión</button>
+    <button id="darkToggle" class="btn btn-sm btn-light">
+      <i class="bi bi-moon"></i></button>
+  </div>
+</nav>
+
+<div class="container">
+  <h2>Transferencias a terceros</h2>
+    
+  <!-- Botón para abrir modal -->
+  <button type="button" id="addContactBtn" class="btn btn-primary btn-block mb-3">Agregar nuevo contacto </button>
+
+  <!-- ===== BUSCADOR ===== -->
+  <form id="searchForm" class="mb-3">
+    <div class="form-group">
+      <label>Buscar en la agenda de transferencias:</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="searchContact" placeholder="Nombre del contacto">
       </div>
-    </nav>
+    </div>
+  </form>
 
-    <main class="container my-4">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card mb-3">
-            <div class="card-body">
-              <h5 class="card-title">Enviar dinero</h5>
-              <form id="sendForm">
-                <div class="mb-3">
-                  <label for="to" class="form-label">Enviar a (contacto)</label>
-                  <input id="to" list="contactsList" class="form-control" placeholder="Nombre del contacto" required>
-                  <datalist id="contactsList"></datalist>
-                </div>
-                <div class="mb-3">
-                  <label for="amount" class="form-label">Monto</label>
-                  <input id="amount" type="number" step="0.01" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                  <label for="note" class="form-label">Nota</label>
-                  <input id="note" type="text" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary">Enviar</button>
-              </form>
-              <a href="menu.html" class="btn btn-secondary mt-2">Volver</a>
-            </div>
-          </div>
-        </div>
+  <!-- ===== FORM TRANSFERENCIA ===== -->
+  <form id="sendMoneyForm">
+    <div class="form-group">
+      <label>Monto a Enviar:</label>
+      <input type="number" class="form-control" id="transferAmount" placeholder="Ingrese el monto">
+    </div>
 
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Contactos</h5>
-              <form id="addContactForm" class="mb-3 d-flex">
-                <input id="contactName" class="form-control me-2" placeholder="Nuevo contacto" required>
-                <button class="btn btn-outline-success">Agregar</button>
-              </form>
-              <ul id="contactsListUI" class="list-group"></ul>
-            </div>
-          </div>
-        </div>
+    <!-- Importante: type="button" y d-none para controlar visibilidad -->
+    <button id="sendBtn" type="button" class="btn btn-primary d-none">
+      Enviar dinero
+    </button>
+  </form>
+
+  <div id="transferMsg"></div>
+
+  <h3 class="mt-4">Contactos</h3>
+  <ul id="contactList" class="list-group"></ul>
+    
+  <a href="menu.html" class="btn btn-secondary btn-block mt-3">
+    <i class="bi bi-arrow-left mr-2"></i> Volver al Menú Principal
+  </a>
+</div>
+
+<!-- Modal para agregar contacto -->
+<div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addContactModalLabel">Agregar Nuevo Contacto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </main>
+      <div class="modal-body">
+        <form id="addContactForm">
+          <div class="form-group">
+            <label for="contactName">Nombre y apellido</label>
+            <input type="text" class="form-control" id="contactName" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras y espacios" required>
+          </div>
+          <div class="form-group">
+            <label for="contactCbu">Número de CBU</label>
+            <input type="text" class="form-control" id="contactCbu" inputmode="numeric" pattern="[0-9]+" title="Solo números" required>
+          </div>
+          <div class="form-group">
+            <label for="contactAlias">Alias</label>
+            <input type="text" class="form-control" id="contactAlias" required>
+          </div>
+          <div class="form-group">
+            <label for="contactBank">Nombre del Banco</label>
+            <input type="text" class="form-control" id="contactBank" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="saveContact">Guardar Contacto</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/common.js"></script>
-    <script src="assets/js/sendmoney.js"></script>
-  </body>
+<!-- Modal para confirmar transferencia -->
+<div class="modal fade" id="confirmTransferModal" tabindex="-1" aria-labelledby="confirmTransferLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmTransferLabel">Confirmar transferencia</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmTransferText" class="mb-0"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="confirmTransferBtn">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/JS/script.js"></script>
+
+</body>
 </html>
